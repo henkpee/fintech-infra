@@ -62,20 +62,30 @@ resource "kubernetes_namespace" "prometheus-namespace" {
 # Prometheus Role
 ################################################################################
 
-module "prometheus_role" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+resource "aws_iam_role" "prometheus_role" {
+  name = "${var.env_name}_prometheus"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = var.oidc_provider_arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "${replace(var.oidc_provider_arn, "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/", "")}:sub" = "system:serviceaccount:${kubernetes_namespace.prometheus-namespace.metadata[0].name}:amp-iamproxy-ingest-role"
+          }
+        }
+      }
+    ]
+  })
+}
 
-  role_name                                        = "${var.env_name}_prometheus"
-  attach_amazon_managed_service_prometheus_policy  = true
-  amazon_managed_service_prometheus_workspace_arns = [module.prometheus.workspace_arn]
-
-  oidc_providers = {
-    main = {
-      provider_arn               = var.oidc_provider_arn
-      namespace_service_accounts = ["${kubernetes_namespace.prometheus-namespace.metadata[0].name}:amp-iamproxy-ingest-role"]
-    }
-  }
-
+resource "aws_iam_role_policy_attachment" "prometheus_policy" {
+  role       = aws_iam_role.prometheus_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess"
 }
 
 ################################################################################

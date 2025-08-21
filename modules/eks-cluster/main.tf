@@ -105,9 +105,9 @@ module "eks" {
   # Access entries (IAM Identity Center or user/role mapping)
   ##############################################
   access_entries = {
-    fusi = {
+    kojopee = {
       kubernetes_groups = ["eks-admins"]
-      principal_arn     = "arn:aws:iam::999568710647:user/nfusi"
+      principal_arn     = "arn:aws:iam::490004648925:user/kojo"
       policy_associations = [
         {
           policy_arn  = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
@@ -118,7 +118,7 @@ module "eks" {
 
     github_runner = {
       kubernetes_groups = ["eks-admins"]
-      principal_arn     = "arn:aws:iam::999568710647:role/github-runner-ssm-role"
+      principal_arn     = "arn:aws:iam::490004648925:role/github-runner-ssm-role"
       policy_associations = [
         {
           policy_arn  = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"

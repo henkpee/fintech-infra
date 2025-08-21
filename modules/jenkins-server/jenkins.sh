@@ -82,7 +82,7 @@ echo "Creating Nginx site for Jenkins..."
 sudo tee /etc/nginx/sites-available/jenkins.conf > /dev/null <<'EOL'
 server {
     listen 80;
-    server_name jenkins.dominionsystem.org;
+    server_name jenkins.kojoawsterraform.com;
 
     location / {
         proxy_pass http://localhost:8080;
@@ -108,7 +108,7 @@ sudo certbot --nginx \
   --non-interactive \
   --agree-tos \
   --email fusisoft@gmail.com \
-  -d jenkins.dominionsystem.org
+  -d jenkins.kojoawsterraform.com
 
 echo "Setting up daily cron for Certbot renewal..."
 # This line ensures certbot renew runs quietly each day at midnight
@@ -117,4 +117,4 @@ sudo bash -c 'echo "0 0 * * * root certbot renew --quiet" >> /etc/crontab'
 echo "Reloading Nginx to apply SSL..."
 sudo systemctl restart nginx
 
-echo "✅ Jenkins is now available at: https://jenkins.dominionsystem.org"
+echo "✅ Jenkins is now available at: https://jenkins.kojoawsterraform.com"

@@ -1,6 +1,6 @@
 locals {
   common_tags = {
-    env       = "dev"
+    env       = "prod"
     terraform = "true"
   }
 }

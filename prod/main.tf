@@ -181,7 +181,7 @@ module "maven-sonarqube-server" {
   key_name          = var.key_name
   security_group_id = module.eks-client-node.eks_client_sg
   subnet_id         = module.vpc.public_subnets[0]
-  # main_region   = var.main_region
+  main_region       = var.main_region
 
   #   db_name              = var.db_name
   #   db_username          = var.db_username
