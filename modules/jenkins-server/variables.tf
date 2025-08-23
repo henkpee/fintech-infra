@@ -7,7 +7,7 @@ variable "ami_id" {
 variable "instance_type" {
   description = "The instance type for the Jenkins server"
   type        = string
-  
+  default     = "t2.medium"
 }
 
 variable "key_name" {
